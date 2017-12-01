@@ -10,7 +10,6 @@ router-view设置class(匹配到路径对应组件根节点元素，从而设置
 <router-link :to="{path:'/user/'+item.tip+'/'+item.id,query:{info:'follow'}}">{{item.userName}}</router-link>
 path: '/user/:tip?/:userId?'动态路由设置，通过this.$route当前被激活路由对象信息，获取动态路由路径id
 query:{info:'follow'}路径?后面  // http://localhost:8080/user/vip/1?info=follow
-//////////////////////////////////////////////////////////
 	data(){
 	    return {
 	        userList: data,
@@ -42,5 +41,4 @@ query:{info:'follow'}路径?后面  // http://localhost:8080/user/vip/1?info=fol
 	      console.log(this.$route)
 	    }
      }
-//////////////////////////////////////////////////////////
 
