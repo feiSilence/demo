@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>无标题文档</title>
+<style>
+#tab div{ width:200px; height:200px; border:1px #000 solid; display:none;}
+#tab .active{ background:red;}
+</style>
+<script src="jquery-1.11.1.js"></script>
+<script>
+
+//自定义事件:(在原有事件基础上升级出来更高级的接口)
+
+//beforeChange
+
+//afterChange
+
+
+$(function(){
+
+	//$('#tab').tabs();		//调用选项卡方法 //默认行为
+	
+	$('#tab').tabs({	//传递配置信息
+		heads : ['体育','娱乐','新闻','视频'],
+		bodys : ['体育11111111','娱乐123123123','新闻fffffff','视频ffffffggggg'],
+		events : 'mouseover'
+	});
+	//添加自定义事件
+	/*$('#tab').on('beforeChange afterChange',function(){
+		alert( $('#tab').find('div:visible').html() );
+	});*/	//'div:visible'找到当前显示的
+	
+	/*$('#tab').on('afterChange',function(){
+		alert( $('#tab').find('div:visible').html() );
+	});*/
+	
+});
+
+(function($){
+	//defaults选项卡默认信息
+	var defaults = {
+		heads : ['1','2','3'],
+		bodys : ['1111111','2222222','3333333'],
+		events : 'click'	//可以修改事件
+	};
+	
+	var settings = {};
+	var $parent = null;	//接收父级元素
+	
+	function fnTab(options){	//options接收配置信息的形参
+		
+		$parent = this;  //this就是$('#tab')元素
+		
+		settings = $.extend(settings , defaults , options);	 //$.extend()方法
+		
+		create();
+		bind();
+		
+	}
+	//动态创建
+	function create(){
+		
+		for(var i=0;i<settings.heads.length;i++){
+			var $input = $('<input type="button" value="'+ settings.heads[i] +'">');
+			if(i==0){
+				$input.attr('class','active');
+			}
+			$parent.append( $input );
+		}
+		
+		for(var i=0;i<settings.bodys.length;i++){
+			var $div = $('<div>'+ settings.bodys[i] +'</div>');
+			if(i==0){
+				$div.css('display','block');
+			}
+			$parent.append( $div );
+		}
+		
+	}
+	//操作
+	function bind(){
+		
+		$parent.find('input').on(settings.events,function(){
+			
+			$parent.trigger('beforeChange');	//自动触发自定义事件
+			
+			$parent.find('input').attr('class','');
+			$(this).attr('class','active');
+			$parent.find('div').css('display','none');
+			$parent.find('div').eq( $(this).index() ).css('display','block');
+			
+			$parent.trigger('afterChange');
+			
+		});
+		
+	}
+	//通过$.fn.extend() 对外提供接口tabs : fnTab
+	$.fn.extend({
+		tabs : fnTab
+	});
+	
+})(jQuery);
+
+</script>
+</head>
+
+<body>
+<div id="tab">
+	<!--<input class="active" type="button" value="1">
+    <input type="button" value="2">
+    <input type="button" value="3">
+    <div style="display:block">1111111</div>
+    <div>2222222</div>
+    <div>3333333</div>-->
+</div>
+</body>
+</html>
